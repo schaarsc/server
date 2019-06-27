@@ -318,7 +318,7 @@ class Session implements IUserSession, Emitter {
 
 	}
 
-	public function setImpersonatingUserID(bool $useCurrentUser = true) {
+	public function setImpersonatingUserID(bool $useCurrentUser = true): void {
 		if ($useCurrentUser === false) {
 			$this->session->remove('oldUserId');
 			return;

@@ -83,7 +83,7 @@ interface IUserSession {
 
 	/**
 	 * get getImpersonatingUserID
-	 * @return string | null
+	 * @return string|null
 	 * @since 17.0.0
 	 */
 	public function getImpersonatingUserID();
@@ -92,5 +92,5 @@ interface IUserSession {
 	 * set setImpersonatingUserID
 	 * @since 17.0.0
 	 */
-	public function setImpersonatingUserID(bool $useCurrentUser = true);
+	public function setImpersonatingUserID(bool $useCurrentUser = true): void;
 }
