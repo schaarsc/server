@@ -52,9 +52,9 @@ $maxUploadFilesize = min($upload_max_filesize, $post_max_size);
 		<input type="checkbox" class="hidden-visually" id="showgridview"
 			<?php if($_['showgridview']) { ?>checked="checked" <?php } ?>/>
 		<label id="view-toggle" for="showgridview" class="button <?php p($_['showgridview'] ? 'icon-toggle-filelist' : 'icon-toggle-pictures') ?>"
-			title="<?php p($l->t('Toggle grid view'))?>"></label>
+			title="<?php p($l->t('Toggle grid view'))?>" tabindex="0"></label>
 	<?php } ?>
-	
+
 	<!-- files listing -->
 	<div id="files-public-content">
 		<div id="preview">
