@@ -312,7 +312,7 @@ class Session implements IUserSession, Emitter {
 	/**
 	 * @return mixed
 	 */
-	public function getImpersonatingUserID() {
+	public function getImpersonatingUserID(): ?string {
 
 		return $this->session->get('oldUserId');
 

@@ -57,7 +57,7 @@ class DummyUserSession implements IUserSession {
 	 * @return string|null
 	 * @since 17.0.0
 	 */
-	public function getImpersonatingUserID() {
+	public function getImpersonatingUserID() : ?string {
 		return null;
 	}
 
