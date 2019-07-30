@@ -32,6 +32,10 @@ use Sabre\DAV\PropFind;
 use Sabre\DAV\Server;
 use Sabre\DAV\Xml\Property\LocalHref;
 use Sabre\DAVACL\IPrincipal;
+use Sabre\VObject\Component\VEvent;
+use Sabre\VObject\ITip;
+use Sabre\VObject\Parameter;
+use Sabre\VObject\Property;
 
 class Plugin extends \Sabre\CalDAV\Schedule\Plugin {
 
@@ -92,6 +96,61 @@ class Plugin extends \Sabre\CalDAV\Schedule\Plugin {
 	}
 
 	/**
+	 * @inheritDoc
+	 */
+	public function scheduleLocalDelivery(ITip\Message $iTipMessage):void {
+		parent::scheduleLocalDelivery($iTipMessage);
+
+		// We only care when the message was successfully delivered locally
+		if ($iTipMessage->scheduleStatus !== '1.2;Message delivered locally') {
+			return;
+		}
+
+		// We only care about request. reply and cancel are properly handled
+		// by parent::scheduleLocalDelivery already
+		if (strcasecmp($iTipMessage->method, 'REQUEST') !== 0) {
+			return;
+		}
+
+		// If parent::scheduleLocalDelivery set scheduleStatus to 1.2,
+		// it means that it was successfully delivered locally.
+		// Meaning that the ACL plugin is loaded and that a principial
+		// exists for the given recipient id, no need to double check
+		/** @var \Sabre\DAVACL\Plugin $aclPlugin */
+		$aclPlugin = $this->server->getPlugin('acl');
+		$principalUri = $aclPlugin->getPrincipalByUri($iTipMessage->recipient);
+		$calendarUserType = $this->getCalendarUserTypeForPrincipal($principalUri);
+		if (strcasecmp($calendarUserType, 'ROOM') !== 0 && strcasecmp($calendarUserType, 'RESOURCE') !== 0) {
+			return;
+		}
+
+		$attendee = $this->getCurrentAttendee($iTipMessage);
+		if (!$attendee) {
+			return;
+		}
+
+		// We only respond when a response was actually requested
+		$rsvp = $this->getAttendeeRSVP($attendee);
+		if (!$rsvp) {
+			return;
+		}
+
+		// We only respond when there was no response so far
+		$partStat = $this->getAttendeePartstat($attendee);
+		if (strcasecmp($partStat, 'NEEDS-ACTION') !== 0) {
+			return;
+		}
+
+
+
+
+
+		// TODO: figure out whether ROOM / RESOURCE is already busy
+
+
+	}
+
+	/**
 	 * Always use the personal calendar as target for scheduled events
 	 *
 	 * @param PropFind $propFind
@@ -139,5 +198,73 @@ class Plugin extends \Sabre\CalDAV\Schedule\Plugin {
 				return new LocalHref($result[0]['href']);
 			});
 		}
+	}
+
+	/**
+	 * Returns a list of addresses that are associated with a principal.
+	 *
+	 * @param string $principal
+	 * @return string?
+	 */
+	protected function getCalendarUserTypeForPrincipal($principal):?string {
+		$calendarUserType = '{' . self::NS_CALDAV . '}calendar-user-type';
+		$properties = $this->server->getProperties(
+			$principal,
+			[$calendarUserType]
+		);
+
+		// If we can't find this information, we'll stop processing
+		if (!isset($properties[$calendarUserType])) {
+			return null;
+		}
+
+		return $properties[$calendarUserType];
+	}
+
+	/**
+	 * @param ITip\Message $iTipMessage
+	 * @return null|Property
+	 */
+	private function getCurrentAttendee(ITip\Message $iTipMessage) {
+		/** @var VEvent $vevent */
+		$vevent = $iTipMessage->message->VEVENT;
+		$attendees = $vevent->select('ATTENDEE');
+		foreach ($attendees as $attendee) {
+			/** @var Property $attendee */
+			if (strcasecmp($attendee->getValue(), $iTipMessage->recipient) === 0) {
+				return $attendee;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * @param Property|null $attendee
+	 * @return bool
+	 */
+	private function getAttendeeRSVP(Property $attendee = null):bool {
+		if ($attendee !== null) {
+			$rsvp = $attendee->offsetGet('RSVP');
+			if (($rsvp instanceof Parameter) && (strcasecmp($rsvp->getValue(), 'TRUE') === 0)) {
+				return true;
+			}
+		}
+		// RFC 5545 3.2.17: default RSVP is false
+		return false;
+	}
+
+	/**
+	 * @param Property|null $attendee
+	 * @return string
+	 */
+	private function getAttendeePartstat(Property $attendee = null):string {
+		if ($attendee !== null) {
+			$partStat = $attendee->offsetGet('PARTSTAT');
+			if ($partStat instanceof Parameter) {
+				return $partStat->getValue();
+			}
+		}
+		// RFC 5545 3.2.12: default PARTSTAT to NEEDS-ACTION
+		return 'NEEDS-ACTION';
 	}
 }
