@@ -39,6 +39,8 @@ class ProxyMapper extends QBMapper {
 
 	/**
 	 * @param string $proxyId The userId that can act as a proxy for the resulting calendars
+	 *
+	 * @return Proxy[]
 	 */
 	public function getProxiesFor(string $proxyId): array {
 		$qb = $this->db->getQueryBuilder();
@@ -52,6 +54,8 @@ class ProxyMapper extends QBMapper {
 
 	/**
 	 * @param string $ownerId The userId that has the resulting proxies for their calendars
+	 *
+	 * @return Proxy[]
 	 */
 	public function getProxiesOf(string $ownerId): array {
 		$qb = $this->db->getQueryBuilder();
