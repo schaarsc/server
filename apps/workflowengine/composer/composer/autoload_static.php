@@ -35,6 +35,7 @@ class ComposerStaticInitWorkflowEngine
         'OCA\\WorkflowEngine\\Controller\\FlowOperations' => __DIR__ . '/..' . '/../lib/Controller/FlowOperations.php',
         'OCA\\WorkflowEngine\\Controller\\RequestTime' => __DIR__ . '/..' . '/../lib/Controller/RequestTime.php',
         'OCA\\WorkflowEngine\\Manager' => __DIR__ . '/..' . '/../lib/Manager.php',
+        'OCA\\WorkflowEngine\\Settings\\Admin' => __DIR__ . '/..' . '/../lib/Settings/Admin.php',
         'OCA\\WorkflowEngine\\Settings\\Section' => __DIR__ . '/..' . '/../lib/Settings/Section.php',
     );
 

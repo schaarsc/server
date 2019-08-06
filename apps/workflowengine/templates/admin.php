@@ -22,22 +22,6 @@
 /** @var array $_ */
 /** @var \OCP\IL10N $l */
 ?>
-<div id="<?php p($_['appid']); ?>" class="section workflowengine">
-	<h2 class="inlineblock"><?php p($_['heading']); ?></h2>
-	<?php if (!empty($_['docs'])): ?>
-		<a target="_blank" rel="noreferrer noopener" class="icon-info svg"
-		   title="<?php p($l->t('Open documentation'));?>"
-		   href="<?php p(link_to_docs($_['docs'])); ?>">
-		</a>
-	<?php endif; ?>
 
-	<?php if (!empty($_['settings-hint'])): ?>
-		<p class="settings-hint"><?php p($_['settings-hint']); ?></p>
-	<?php endif; ?>
+<div id="<?php p($_['appid']); ?>" class="workflowengine"></div>
 
-	<?php if (!empty($_['description'])): ?>
-		<p><?php p($_['description']); ?></p>
-	<?php endif; ?>
-
-	<div class="rules"><span class="icon-loading-small"></span> <?php p($l->t('Loading…')); ?></div>
-</div>

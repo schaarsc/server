@@ -20,5 +20,6 @@ return array(
     'OCA\\WorkflowEngine\\Controller\\FlowOperations' => $baseDir . '/../lib/Controller/FlowOperations.php',
     'OCA\\WorkflowEngine\\Controller\\RequestTime' => $baseDir . '/../lib/Controller/RequestTime.php',
     'OCA\\WorkflowEngine\\Manager' => $baseDir . '/../lib/Manager.php',
+    'OCA\\WorkflowEngine\\Settings\\Admin' => $baseDir . '/../lib/Settings/Admin.php',
     'OCA\\WorkflowEngine\\Settings\\Section' => $baseDir . '/../lib/Settings/Section.php',
 );
