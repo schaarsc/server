@@ -22,7 +22,7 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\DAV\CalDAV\Delegation;
+namespace OCA\DAV\CalDAV\Proxy;
 
 use OCP\AppFramework\Db\Entity;
 

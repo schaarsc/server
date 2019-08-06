@@ -22,7 +22,7 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\DAV\CalDAV;
+namespace OCA\DAV\CalDAV\Proxy;
 
 use OCA\DAV\CalDAV\Delegation\Proxy;
 use OCP\AppFramework\Db\QBMapper;
