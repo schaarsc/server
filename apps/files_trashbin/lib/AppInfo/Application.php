@@ -23,7 +23,7 @@
 
 namespace OCA\Files_Trashbin\AppInfo;
 
-use OCA\DAV\CalDAV\ProxyMapper;
+use OCA\DAV\CalDAV\Proxy\ProxyMapper;
 use OCA\DAV\Connector\Sabre\Principal;
 use OCA\Files_Trashbin\Trash\ITrashManager;
 use OCA\Files_Trashbin\Trash\TrashManager;
