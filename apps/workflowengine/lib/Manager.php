@@ -247,7 +247,7 @@ class Manager implements IManager {
 	 * @param string $operation
 	 * @throws \UnexpectedValueException
 	 */
-	protected function validateOperation($class, $name, array $checks, $operation) {
+	public function validateOperation($class, $name, array $checks, $operation) {
 		try {
 			/** @var IOperation $instance */
 			$instance = $this->container->query($class);
