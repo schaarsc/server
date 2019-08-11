@@ -112,13 +112,14 @@ class FileSystemTags implements ICheck {
 		$fileIds = $this->getFileIds($cache, $this->path, !$this->storage->instanceOfStorage(IHomeStorage::class));
 
 		$systemTags = [];
+		/* disable cache for transitive tagging
 		foreach ($fileIds as $i => $fileId) {
 			if (isset($this->fileSystemTags[$fileId])) {
 				$systemTags[] = $this->fileSystemTags[$fileId];
 				unset($fileIds[$i]);
 			}
 		}
-
+		*/
 		if (!empty($fileIds)) {
 			$mappedSystemTags = $this->systemTagObjectMapper->getTagIdsForObjects($fileIds, 'files');
 			foreach ($mappedSystemTags as $fileId => $fileSystemTags) {
