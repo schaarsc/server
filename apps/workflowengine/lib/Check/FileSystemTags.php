@@ -68,7 +68,12 @@ class FileSystemTags implements ICheck, IFileCheck {
 	 */
 	public function executeCheck($operator, $value) {
 		$systemTags = $this->getSystemTags();
-		return ($operator === 'is') === in_array($value, $systemTags);
+		$result = ($operator === 'is') === in_array($value, $systemTags);
+		if ($result) {
+			//invalidate cache to allow matches on tags set by automatedtagging
+			unset($this->fileSystemTags);
+		}
+		return $result;
 	}
 
 	/**
